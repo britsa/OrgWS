@@ -41,9 +41,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'contact'
+    'access',
+    'contact',
 
- # external dependency
+    # external dependency
     'rest_framework'
 
 
