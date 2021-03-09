@@ -1,9 +1,22 @@
-import ...
+from rest_framework import generics
+from rest_framework.response import Response
 
-class Client(generics.RetrieveUpdateDestroyAPIView,generics.CreateAPIView):
+class Client(generics.RetrieveUpdateDestroyAPIView,generics.CreateAPIView,generics.ListAPIView):
 
-    def Create(self,request,*args,**kwargs):
+    def retrieve(self, request, *args, **kwargs):
         pass
 
-    def retrieveupdate(self,request,*args,**kwargs):
+    def update(self, request, *args, **kwargs):
+        pass
+
+    def create(self, request, *args, **kwargs):
+        pass
+
+    def partial_update(self, request, *args, **kwargs):
+        pass
+
+    def destroy(self, request, *args, **kwargs):
+        pass
+
+    def list(self, request, *args, **kwargs):
         pass
