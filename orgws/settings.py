@@ -43,6 +43,7 @@ INSTALLED_APPS = [
 
     'access',
     'contact',
+    'client'
 
     # external dependency
     'rest_framework'
