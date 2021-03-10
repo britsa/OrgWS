@@ -8,3 +8,17 @@ FIREBASE_CERT: str = 'FIREBASE_KEY'
 
 # Path Params
 API_VERSION: str = 'version'
+
+# other constants
+DATETIME_FORMAT: str = '%d-%m-%Y %H:%M:%S'
+
+
+class Collections(object):
+    TOKEN = 'token'
+
+
+# header keys
+class HeaderKeys(object):
+    INFORMATION = 'information'
+    TOKEN = 'token'
+    CLIENT_ID = 'client-ID'
