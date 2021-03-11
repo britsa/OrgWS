@@ -40,7 +40,7 @@ class TokenInformation(object):
         }
         return response
 
-    def validity_info(self) -> dict:
+    def validity_info(self) -> tuple:
         expiry_date = dt.strptime(self.__expiration_date, constants.DATETIME_FORMAT)
         now = dt.strptime(dt.strftime(dt.now(), constants.DATETIME_FORMAT), constants.DATETIME_FORMAT)
         print(expiry_date, now, type(expiry_date), type(now))
@@ -48,7 +48,7 @@ class TokenInformation(object):
         response: dict = {
             u'Validity': now < expiry_date
         }
-        return response
+        return response, now < expiry_date
 
     def new_token_info(self, token: str) -> dict:
         response: dict = {

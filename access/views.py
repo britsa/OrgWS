@@ -45,8 +45,15 @@ class TokenHandler(generics.RetrieveAPIView, generics.CreateAPIView):
                 # verifying the token existence in DB
                 if database_data.exists:
                     token_info: TokenInformation = TokenInformation(database_data)
-                    # token is found. Validity information is collected. Sending to the consumer
-                    return Response(token_info.validity_info(), status=HttpStatusCode.OK.status_code())
+                    # token is found. Validity information is collected.
+                    response, still_valid = token_info.validity_info()
+
+                    if not still_valid:
+                        # If the token is expired, then the token is deleted.
+                        connect_firestore_with_key(Collections.TOKEN, get_env(constants.FIREBASE_CERT)).document(token_value).delete()
+
+                    # Response is send to the consumer
+                    return Response(response, status=HttpStatusCode.OK.status_code())
                 else:
                     # token is not found. Forbidden message will send to the consumer
                     return Response(error_response(HttpStatusCode.FORBIDDEN), status=HttpStatusCode.FORBIDDEN.status_code())
