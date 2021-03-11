@@ -12,6 +12,7 @@ from orgws_common.validators import validate_information_header, validate_boolea
 
 class TokenHandler(generics.RetrieveAPIView, generics.CreateAPIView):
 
+    # GET method
     def retrieve(self, request, *args, **kwargs):
         try:
             # find the version from the URL
@@ -67,6 +68,7 @@ class TokenHandler(generics.RetrieveAPIView, generics.CreateAPIView):
             # Unknown exception handled
             return Response(error_response(HttpStatusCode.INTERNAL_SERVER_ERROR), status=HttpStatusCode.INTERNAL_SERVER_ERROR.status_code())
 
+    # POST method
     def create(self, request, *args, **kwargs):
         try:
             # find the version from the URL
