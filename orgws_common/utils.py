@@ -4,6 +4,8 @@ This orgws_common.utils will have all the support methods and classes that can b
 import logging
 import os
 
+from rest_framework.response import Response
+
 from orgws_common import constants
 from dotenv import load_dotenv
 from stash_service import AppResponseCodes, AppException, HttpStatusCode
@@ -41,9 +43,24 @@ def requested_version(request, kwargs: dict) -> str:
     return version
 
 
-def error_response(http_code: HttpStatusCode) -> dict:
+def error_response_body(httpStatusCode: HttpStatusCode) -> dict:
     response: dict = {u'Error': {
-        'Code': http_code.status_code(),
-        'Message': http_code.status_message()
-    }}
+        'Code': httpStatusCode.status_code(),
+        'Message': httpStatusCode.status_message()
+        }
+    }
     return response
+
+
+def error_response(exception: Exception) -> Response:
+    if type(exception) == KeyError:
+        # Expected key not found in the request or dictionary
+        return Response(error_response_body(HttpStatusCode.BAD_REQUEST), status=HttpStatusCode.BAD_REQUEST.status_code())
+
+    elif type(exception) == AppException:
+        # Validation exception found
+        return Response(error_response_body(HttpStatusCode.PRECONDITION_FAILED), status=HttpStatusCode.PRECONDITION_FAILED.status_code())
+
+    else:
+        # Other exceptions found
+        return Response(error_response_body(HttpStatusCode.INTERNAL_SERVER_ERROR), status=HttpStatusCode.INTERNAL_SERVER_ERROR.status_code())
