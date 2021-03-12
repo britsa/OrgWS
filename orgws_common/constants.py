@@ -15,6 +15,7 @@ DATETIME_FORMAT: str = '%d-%m-%Y %H:%M:%S'
 
 class Collections(object):
     TOKEN = 'token'
+    CUSTOMER = 'customer'
 
 
 # header keys
