@@ -11,6 +11,7 @@ API_VERSION: str = 'version'
 
 # other constants
 DATETIME_FORMAT: str = '%d-%m-%Y %H:%M:%S'
+TOKEN_SPAN_MINUTES: int = 60
 
 
 class Collections(object):

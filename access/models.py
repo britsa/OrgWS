@@ -2,18 +2,18 @@ from datetime import datetime as dt, timedelta
 from hashlib import sha1
 
 from orgws_common import constants
+from orgws_common.constants import TOKEN_SPAN_MINUTES
 
 
 def generate_new_token(client_id: str) -> tuple:
-    span: int = 60  # minutes
     now = dt.now()
     hash_string: str = client_id + dt.strftime(now, constants.DATETIME_FORMAT)
     hash_string_encoded = str.encode(hash_string)
     db_object: dict = {
         u'owner_id': client_id,
         u'creation_date': dt.strftime(now, constants.DATETIME_FORMAT),
-        u'span_time': str(span),
-        u'expiry_date': dt.strftime(now + timedelta(minutes=span), constants.DATETIME_FORMAT)
+        u'span_time': str(TOKEN_SPAN_MINUTES),
+        u'expiry_date': dt.strftime(now + timedelta(minutes=TOKEN_SPAN_MINUTES), constants.DATETIME_FORMAT)
     }
     return sha1(hash_string_encoded).hexdigest(), db_object
 

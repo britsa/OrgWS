@@ -6,7 +6,7 @@ from access import models
 from access.models import TokenInformation
 from orgws_common import constants
 from orgws_common.constants import HeaderKeys, Collections
-from orgws_common.utils import requested_version, get_env, error_response
+from orgws_common.utils import requested_version, get_env, error_response, error_response_body
 from orgws_common.validators import validate_information_header, validate_boolean_header
 
 
@@ -37,7 +37,7 @@ class TokenHandler(generics.RetrieveDestroyAPIView, generics.CreateAPIView):
                             return Response(token_info.show_info(), status=HttpStatusCode.OK.status_code())
                         else:
                             # token is not found. Forbidden message will send to the consumer
-                            return Response(error_response(HttpStatusCode.FORBIDDEN), status=HttpStatusCode.FORBIDDEN.status_code())
+                            return Response(error_response_body(HttpStatusCode.FORBIDDEN), status=HttpStatusCode.FORBIDDEN.status_code())
 
                 # information_required = False or Not found -> Validates the token
                 # establishing connection to Firebase DB
@@ -57,16 +57,9 @@ class TokenHandler(generics.RetrieveDestroyAPIView, generics.CreateAPIView):
                     return Response(response, status=HttpStatusCode.OK.status_code())
                 else:
                     # token is not found. Forbidden message will send to the consumer
-                    return Response(error_response(HttpStatusCode.FORBIDDEN), status=HttpStatusCode.FORBIDDEN.status_code())
-        except KeyError:
-            # Expected header is not found
-            return Response(error_response(HttpStatusCode.BAD_REQUEST), status=HttpStatusCode.BAD_REQUEST.status_code())
-        except AppException as e:
-            # Validation Exception captured
-            return Response(error_response(HttpStatusCode.PRECONDITION_FAILED), status=HttpStatusCode.PRECONDITION_FAILED.status_code())
-        except:
-            # Unknown exception handled
-            return Response(error_response(HttpStatusCode.INTERNAL_SERVER_ERROR), status=HttpStatusCode.INTERNAL_SERVER_ERROR.status_code())
+                    return Response(error_response_body(HttpStatusCode.FORBIDDEN), status=HttpStatusCode.FORBIDDEN.status_code())
+        except Exception as e:
+            return error_response(e)
 
     # POST method
     def create(self, request, *args, **kwargs):
@@ -86,15 +79,9 @@ class TokenHandler(generics.RetrieveDestroyAPIView, generics.CreateAPIView):
                 connect_firestore_with_key(Collections.TOKEN, get_env(constants.FIREBASE_CERT)).document(sha1_token).set(db_source)
                 # New information is updated to the DB. Success message will send to the consumer
                 return Response(TokenInformation(db_source).new_token_info(sha1_token), status=HttpStatusCode.OK.status_code())
-        except KeyError:
-            # Expected header is not found
-            return Response(error_response(HttpStatusCode.BAD_REQUEST), status=HttpStatusCode.BAD_REQUEST.status_code())
-        except AppException as e:
-            # Validation Exception captured
-            return Response(error_response(HttpStatusCode.PRECONDITION_FAILED), status=HttpStatusCode.PRECONDITION_FAILED.status_code())
-        except:
-            # Unknown exception handled
-            return Response(error_response(HttpStatusCode.INTERNAL_SERVER_ERROR), status=HttpStatusCode.INTERNAL_SERVER_ERROR.status_code())
+
+        except Exception as e:
+            return error_response(e)
 
     # DELETE method
     def destroy(self, request, *args, **kwargs):
@@ -122,12 +109,5 @@ class TokenHandler(generics.RetrieveDestroyAPIView, generics.CreateAPIView):
                 # Success response is sent to the consumer
                 return Response(status=HttpStatusCode.NO_CONTENT.status_code())
 
-        except KeyError:
-            # Expected header is not found
-            return Response(error_response(HttpStatusCode.BAD_REQUEST), status=HttpStatusCode.BAD_REQUEST.status_code())
-        except AppException as e:
-            # Validation Exception captured
-            return Response(error_response(HttpStatusCode.PRECONDITION_FAILED), status=HttpStatusCode.PRECONDITION_FAILED.status_code())
-        except:
-            # Unknown exception handled
-            return Response(error_response(HttpStatusCode.INTERNAL_SERVER_ERROR), status=HttpStatusCode.INTERNAL_SERVER_ERROR.status_code())
+        except Exception as e:
+            return error_response(e)
