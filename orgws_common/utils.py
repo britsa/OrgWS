@@ -16,6 +16,7 @@ logger = logging.getLogger(__name__)
 class AppCodes(AppResponseCodes):
     INVALID_BOOLEAN_HEADER_VALUE = (2001, 'Invalid boolean value passed in header')
     ENVIRONMENT_NOT_FOUND = (2002, 'Requested Key not found on the .env file')
+    INVALID_TOKEN = (2003, 'Requested token either expired or unavailable in the database')
 
 
 # get_env() returns the value for the matched key in .env file
