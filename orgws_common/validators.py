@@ -5,6 +5,10 @@ from orgws_common.constants import HeaderKeys
 from orgws_common.utils import AppCodes
 
 
+def validate_security_header(headers: dict) -> bool or AppException:
+    return HeaderKeys.SECURITY in headers.keys()
+
+
 def validate_information_header(headers: dict) -> bool or AppException:
     return HeaderKeys.INFORMATION in headers.keys()
 
