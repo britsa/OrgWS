@@ -57,3 +57,8 @@ class TokenInformation(object):
             u'ExpirationDate': self.__expiration_date
         }
         return response
+
+    def all_info(self, all_details: dict):
+        response, _ = self.validity_info()
+        response[u'Information'] = all_details
+        return response

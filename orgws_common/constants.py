@@ -24,3 +24,4 @@ class HeaderKeys(object):
     INFORMATION = 'information'
     TOKEN = 'token'
     CLIENT_ID = 'client-ID'
+    SECURITY = 'security'
