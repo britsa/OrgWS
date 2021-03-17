@@ -28,7 +28,7 @@ DEBUG = False
 
 ALLOWED_HOSTS = [
     'localhost',
-    'skillscy-orgws-dev'
+    'skillscy-orgws-dev.herokuapp.com'
 ]
 
 
