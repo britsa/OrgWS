@@ -42,6 +42,7 @@ def check_security(token: str) -> None or AppException:
         if valid:
             logger.info(f"{info_response[u'Client'][u'Id']} has the requested service")
             return None
+    logger.info(f"'{token}' is either expired or unavailable")
     raise AppException(AppCodes.INVALID_TOKEN)
 
 
