@@ -27,7 +27,8 @@ SECRET_KEY = 'n*x0ndxb3mrx!x96yc*=l!@uik(59ra%kjn9i=zhkwy&n4$b9&'
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    'localhost'
+    'localhost',
+    'skillscy-orgws-dev'
 ]
 
 
