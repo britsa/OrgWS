@@ -1,15 +1,15 @@
 from rest_framework import generics
 from rest_framework.response import Response
-from stash_service import connect_firestore_with_key
+from stash_service import connect_firestore_with_key, HttpStatusCode
 
 from access.views import check_security
-from client.models import ClientInformation
+from client.models import ClientInformation, give_new_client_id
 from orgws_common import constants
 from orgws_common.constants import HeaderKeys, Collections
 from orgws_common.utils import requested_version, error_response, get_env
 
 
-class Client(generics.RetrieveUpdateDestroyAPIView,generics.CreateAPIView,generics.ListAPIView):
+class Client(generics.RetrieveUpdateDestroyAPIView, generics.CreateAPIView, generics.ListAPIView):
 
     def retrieve(self, request, *args, **kwargs):
         pass
@@ -24,11 +24,14 @@ class Client(generics.RetrieveUpdateDestroyAPIView,generics.CreateAPIView,generi
                 token: str = request.headers[HeaderKeys.TOKEN]
                 check_security(token)
                 body: dict = request.data
-                info:ClientInformation =ClientInformation(body)
-                clientid: str = 'KA2910'
-                connect_firestore_with_key(Collections.CUSTOMER, get_env(constants.FIREBASE_CERT)).document(clientid).set(info.db_info())
+                info: ClientInformation = ClientInformation(body)
+                client_id: str = give_new_client_id(info)
+                connect_firestore_with_key(Collections.CUSTOMER, get_env(constants.FIREBASE_CERT)).document(
+                    client_id).set(info.db_info())
 
-                return Response (body)
+                return Response({
+                    u'ClientId': client_id
+                }, status=HttpStatusCode.OK.status_code())
         except Exception as e:
             return error_response(e)
 
